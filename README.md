@@ -2,6 +2,13 @@
 
 这里提供已发布的插件，以及为 Android 备忘录拓展版 **208（0.5.1-ext）** 开发插件所需的命令行工具、协议和示例。现有插件和对应公钥可在 [Releases](https://github.com/Ga0ga0z1/memo-plugin-market/releases) 下载。
 
+## 可安装的小说插件
+
+| 插件 | 用途 | 下载与安装 |
+| --- | --- | --- |
+| 小说工作室 | 管理书架、设定和大纲，创作、审改并对照阅读双语稿 | [工作室 1.0](https://github.com/Ga0ga0z1/memo-plugin-market/releases/tag/novel-studio-v1) · 需同时安装伴生 APK 和签名插件入口 |
+| 双语选段阅读 | 对照阅读手动输入的中英文选段，保存书签 | [双语阅读 v1](https://github.com/Ga0ga0z1/memo-plugin-market/releases/tag/reader-v1) · 使用宿主的脚本运行环境 |
+
 ## 做出第一个插件
 
 用随手记面板走一遍开发流程。它在插件自己的空间保存一段文字，适合检验安装、授权和重启后读取。电脑需要 Git 和 **Node.js 22.19 或更新版本**；SDK 直接使用 Node 内置模块，无需安装 npm 依赖。手机试装需要已安装拓展版 208 的 Android 设备或模拟器（Android 14 及以上）。
