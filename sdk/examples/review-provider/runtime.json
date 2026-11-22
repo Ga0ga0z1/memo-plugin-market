@@ -1,0 +1,12 @@
+{
+  "format": 1,
+  "protocol": 1,
+  "template": "review/1",
+  "publisher": "example.author",
+  "versionCode": 1,
+  "id": "example.review-provider",
+  "permissions": [
+    "PLUGIN_STATE"
+  ],
+  "exportReview": true
+}

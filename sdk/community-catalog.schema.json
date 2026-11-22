@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "market", "sequence", "expiresAt", "plugins", "revoked"],
+  "properties": {
+    "format": { "const": 1 },
+    "market": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,38}/[a-z0-9_-][a-z0-9._-]{0,99}$" },
+    "sequence": { "$ref": "#/$defs/positive" },
+    "expiresAt": { "$ref": "#/$defs/positive" },
+    "plugins": {
+      "type": "array", "maxItems": 512,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["identity", "title", "repository", "assetId", "fileName", "size", "sha256", "publisherKey"],
+        "properties": {
+          "identity": { "$ref": "#/$defs/identity" },
+          "title": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "repository": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,38}/[A-Za-z0-9_-][A-Za-z0-9._-]{0,99}$" },
+          "assetId": { "$ref": "#/$defs/positive" },
+          "fileName": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,100}\\.memoplugin$" },
+          "size": { "type": "integer", "minimum": 1, "maximum": 8389120 },
+          "sha256": { "$ref": "#/$defs/digest" },
+          "publisherKey": { "type": "string", "contentEncoding": "base64", "minLength": 1, "maxLength": 1368 }
+        }
+      }
+    },
+    "revoked": { "type": "array", "maxItems": 512, "uniqueItems": true, "items": { "$ref": "#/$defs/identity" } }
+  },
+  "$defs": {
+    "positive": { "type": "integer", "minimum": 1 },
+    "digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["publisher", "id", "signerSha256", "versionCode"],
+      "properties": {
+        "publisher": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}(?<!\\.)$" },
+        "id": { "type": "string", "maxLength": 128, "pattern": "^(?!host\\.)(?!memo\\.internal\\.state\\.)[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$" },
+        "signerSha256": { "$ref": "#/$defs/digest" },
+        "versionCode": { "$ref": "#/$defs/positive" }
+      }
+    }
+  }
+}

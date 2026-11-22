@@ -1,0 +1,31 @@
+{
+  "format": "memo.composition-draft/1",
+  "permissions": [
+    "PLUGIN_STATE"
+  ],
+  "entries": [
+    {
+      "id": "save",
+      "title": "保存随手记",
+      "slot": "ACTION",
+      "fields": [
+        {
+          "id": "body",
+          "label": "文字",
+          "type": "TEXT"
+        }
+      ],
+      "steps": [
+        {
+          "do": "statePut",
+          "args": {
+            "key": "memo",
+            "value": {
+              "var": "body"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

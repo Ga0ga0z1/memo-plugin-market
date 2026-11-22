@@ -1,0 +1,37 @@
+{
+  "format": "memo.composition-draft/1",
+  "permissions": [
+    "QUERY_NOTES"
+  ],
+  "entries": [
+    {
+      "id": "find",
+      "title": "按标题查找笔记",
+      "slot": "ACTION",
+      "fields": [
+        {
+          "id": "q",
+          "label": "标题关键词",
+          "type": "TEXT"
+        }
+      ],
+      "steps": [
+        {
+          "do": "query",
+          "args": {
+            "text": {
+              "var": "q"
+            },
+            "limit": 8
+          },
+          "as": "hits"
+        },
+        {
+          "list": {
+            "var": "hits"
+          }
+        }
+      ]
+    }
+  ]
+}

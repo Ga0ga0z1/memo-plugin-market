@@ -1,0 +1,36 @@
+# 提交社区插件
+
+作者在自己的 GitHub 仓库发布插件，并在这里申请审核。当前可以提交新插件或更新，也可以在拓展版 208 上通过文件试装。市场的跨仓签名目录尚未上线。投稿后可在 Issue 中跟进处理结果，只有维护者实际发布签名目录后，对应版本才会通过该目录在 App 中展示。
+
+## 作者发布
+
+1. 选用仓库里的 SDK 示例，改为自己的发布者 ID 和插件 ID。使用相同的 ID 和发布密钥更新插件，每次提高正整数 `versionCode`。私钥应保存在作者控制的仓库外位置。打包和验签命令见 [SDK 指南](sdk/README.md)。
+2. 在自己的公开仓库创建带固定 tag 的正式 GitHub Release。上传 SDK 生成的 `.memoplugin` 和 P-256 发布者公钥 `.der`，说明适用的拓展版、插件用途、许可证、所需权限及数据去向。对于原生伴生插件，另附对应 APK、Android 包名和签名证书 SHA-256。让用户可以通过独立渠道核对发布者公钥的 SHA-256 指纹。
+3. 记录源码提交和构建方法，在设备上用合成数据验证一次主要功能。SDK 的 `verify` 输出中，`assetSha256` 是整个发行包的摘要，`signerSha256` 是公钥指纹。更新时使用新 tag 和新资产，保留已审阅版本的原文件。
+4. 一次申报一个版本。提交发行页、准确文件名、资产摘要、源码与构建资料，并写清权限用途和本版变化。Issue 对公众可见；附件只需链接到公开发行资产。请将私钥、访问令牌、个人笔记、设备标识及含这些内容的日志保存在本地。[填写插件投稿表单](https://github.com/Ga0ga0z1/memo-plugin-market/issues/new?template=plugin-submission.yml)
+
+## 用户在手机上试装
+
+1. 从作者指定的 Release 下载插件和公钥。打开拓展版「设置 → 插件管理与授权 → 发布者与市场来源」，输入发布者 ID，选择 DER 公钥。将弹窗中的指纹与独立渠道取得的指纹逐字核对，匹配后确认信任。
+2. 返回「导入与管理」，选择下载的 `.memoplugin`。核对身份、版本和所申请的权限，确认安装，再按需启用和授权。原生伴生插件还需安装该版本说明指定的伴生 APK。
+3. 按作者提供的入口，用示例数据运行一次并核对结果。可以在「插件动作与授权」撤销权限或停用插件。试装现有市场阅读样包时可从[双语选段阅读发布页](https://github.com/Ga0ga0z1/memo-plugin-market/releases/tag/reader-v1)取得插件与公钥。
+
+## 维护者核验
+
+使用市场仓库中的 SDK，先独立核对作者公钥指纹。以下命令从本仓库根目录运行。替换示例中的作者仓库、固定 tag、插件文件名、已核对的 DER 公钥路径及展示名。
+
+```sh
+node sdk/memo-plugin.mjs review-github owner/plugin v1.0.0 format.memoplugin publisher.der "文本整理"
+```
+
+在线核验从 GitHub 重新取得对应正式 Release 和上传资产，检查资产 ID、字节数、GitHub 摘要与作者签名。返回的 `manifest` 可用来核对身份、版本和权限，`listing` 是待审阅的候选条目。
+
+已有原始下载文件时，可离线复查。保留原始文件名，并将示例中的 `123456` 换成该文件在 GitHub Release 中的真实**资产 ID**。
+
+```sh
+node sdk/memo-plugin.mjs review-asset format.memoplugin publisher.der owner/plugin 123456 "文本整理"
+```
+
+离线命令使用维护者输入的仓库名与资产 ID。这两项、tag 与下载来源仍需凭独立取得的 GitHub 记录核实。核验失败或来源无法核实时，在 Issue 中记录待补项。验签通过后还需审阅源码、构建方法、许可证、权限及其变化，并用合成数据复核作者给出的测试步骤。在 Issue 中记录审阅的身份、版本、整包摘要与结论。
+
+签名目录启用后，维护者才将批准的固定资产条目加入目录，递增 `sequence`、设置到期时间，用单独保管的市场私钥签名，并在市场仓库的正式 `community-catalog` Release 发布 `community.memocatalog`。用户配置并核对市场目录公钥后，仍需审阅新作者公钥、安装及运行权限。[目录格式](sdk/community-catalog.schema.json)

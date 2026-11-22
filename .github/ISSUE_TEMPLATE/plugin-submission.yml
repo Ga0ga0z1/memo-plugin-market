@@ -1,0 +1,51 @@
+name: 社区插件投稿
+description: 申请审核一个已由作者签名发布的插件版本。
+title: "[插件投稿] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        一份投稿对应一个正式 Release 中的一个插件版本。字段均为公开信息。请使用示例数据描述测试，私钥、令牌、设备标识和真实笔记请留在本地。[投稿说明](https://github.com/Ga0ga0z1/memo-plugin-market/blob/main/CONTRIBUTING.md)
+  - type: input
+    id: identity
+    attributes:
+      label: 发布者 ID、插件 ID 和 versionCode
+      placeholder: "example.author / example.format / 1"
+    validations:
+      required: true
+  - type: input
+    id: release
+    attributes:
+      label: 作者仓库的正式 Release
+      description: 填写指向精确 tag 的公开 GitHub 发布页。
+      placeholder: "https://github.com/OWNER/REPO/releases/tag/v1.0.0"
+    validations:
+      required: true
+  - type: textarea
+    id: assets
+    attributes:
+      label: 插件资产与发布者公钥
+      description: 写明 .memoplugin 与 DER 公钥在 Release 中的准确文件名、整包 SHA-256、公钥 SHA-256 和公钥指纹的独立核对渠道。原生伴生插件另列 APK 的下载链接、包名和签名证书 SHA-256。
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: 源码、构建方法与许可证
+      description: 提供源码固定提交的公开链接、复现构建的命令或说明链接，以及该版本适用许可证的名称或链接。
+    validations:
+      required: true
+  - type: textarea
+    id: usage
+    attributes:
+      label: 展示名、用途、权限及数据去向
+      description: 逐项说明权限用途、读取和写入哪些数据、存储和发送位置。没有申请权限或没有外发时可直接写明。更新时指出与上一版本的差异。
+    validations:
+      required: true
+  - type: textarea
+    id: test
+    attributes:
+      label: 试装环境与复现步骤
+      description: 写出测过的拓展版版本、如何打开插件、示例输入和预期结果；有伴生应用时写出安装顺序。
+    validations:
+      required: true

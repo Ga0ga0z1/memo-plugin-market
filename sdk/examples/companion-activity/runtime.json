@@ -1,0 +1,12 @@
+{
+  "format": 1,
+  "protocol": 1,
+  "template": "activity/1",
+  "publisher": "example.author",
+  "id": "example.reader",
+  "versionCode": 1,
+  "permissions": [],
+  "androidPackage": "com.example.memo.companion",
+  "activityClass": "com.example.memo.companion.MainActivity",
+  "apkSignerSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+}

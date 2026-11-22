@@ -1,0 +1,8 @@
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+*.memoplugin
+*.memocatalog
+node_modules/

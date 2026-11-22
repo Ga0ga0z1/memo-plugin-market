@@ -1,0 +1,31 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { margin: 1rem; font: 1rem system-ui, sans-serif; color-scheme: light dark; }
+  textarea { display: block; width: 100%; box-sizing: border-box; }
+  button { margin-top: .75rem; padding: .5rem 1rem; }
+</style>
+<label for="scratch">插件自己的随手记</label>
+<textarea id="scratch" rows="6" maxlength="1000"></textarea>
+<button type="button" disabled>保存</button>
+<p aria-live="polite" id="status"></p>
+<script>
+  const input = document.querySelector("textarea");
+  const button = document.querySelector("button");
+  const status = document.querySelector("#status");
+  let serial = 0;
+  window.addEventListener("message", event => {
+    if (event.data !== "memo-panel-ready" || !event.ports[0]) return;
+    const port = event.ports[0];
+    port.onmessage = message => {
+      const reply = JSON.parse(message.data);
+      if (reply.ok && reply.id === "open") input.value = reply.value;
+      else status.textContent = reply.ok ? "已保存" : "保存失败或权限已撤销";
+    };
+    port.postMessage(JSON.stringify({id: "open", op: "stateGet", key: "scratch"}));
+    button.disabled = false;
+    button.onclick = () => port.postMessage(JSON.stringify({
+      id: "save-" + ++serial, op: "statePut", key: "scratch", value: input.value
+    }));
+  });
+</script>
