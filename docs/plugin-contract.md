@@ -71,6 +71,8 @@ return {text: previous.value};
 
 ## Android 伴生组件
 
+**离开页面后继续的工作。** `activity/1` 和 `formula/1` 保持各自的前台入口和限时调用语义。新设计中的手机后台长任务由拓展版接收，在伴生进程退出后独立执行，并保存可按任务标识回读的结果。作者须采用宿主已经对其插件身份开放的适配器，发布说明标注最低支持版本。候选的 `novel.writing/1` 面向受信任的小说工作室，尚不构成 208 SDK 的公开接口。已有模板和签名清单继续沿用原字段。[后台任务投稿与验收](../CONTRIBUTING.md#手机后台任务的投稿条件)
+
 **打开自己的界面。** 复制 [Activity 入口清单](../sdk/examples/companion-activity/runtime.json)，把 `androidPackage`、`activityClass` 和 `apkSignerSha256` 替换为实际 APK 的包名、完整类名与当前 Android 签名证书 SHA-256（64 位小写十六进制）。可运行 `apksigner verify --print-certs my-app.apk` 取得证书摘要。这里的证书属于 Android APK。发行包作者使用前述发布者密钥。示例中的全零指纹是待替换值。
 
 ```xml

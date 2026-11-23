@@ -6,10 +6,27 @@ import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { developerIdentity, packPlugin, reviewAsset, reviewGitHubRelease, sha256, signCatalog, verifyEnvelope } from "./memo-plugin.mjs";
+import { checkApkIdentity } from "./review-companion.mjs";
 
 const keys = developerIdentity();
 const signer = createPrivateKey(keys.privateKey);
 const publicKey = createPublicKey({ key: keys.publicKey, type: "spki", format: "der" });
+
+test("market companion review checks Android identity and reports launcher and permission evidence", () => {
+    const signer = "ac".repeat(32);
+    const cert = `Signer #1 certificate SHA-256 digest: ${signer}`;
+    const pkg = "example.reader";
+    const basic = `package: name='${pkg}' versionCode='1'\n`;
+    const launched = basic + "uses-permission: name='android.permission.FOREGROUND_SERVICE'\n" +
+        "launchable-activity: name='example.reader.Shelf' label='' icon=''\n";
+    assert.deepEqual(checkApkIdentity(basic, cert, pkg, signer).launcherActivities, []);
+    const report = checkApkIdentity(launched, cert, pkg, signer);
+    assert.deepEqual(report.launcherActivities, ["example.reader.Shelf"]);
+    assert.deepEqual(report.permissions, ["android.permission.FOREGROUND_SERVICE"]);
+    assert.throws(() => checkApkIdentity(basic, cert, "example.other", signer), /package/);
+    assert.throws(() => checkApkIdentity(basic, cert, pkg, "bc".repeat(32)), /signer/);
+    assert.throws(() => checkApkIdentity(basic, cert + "\n" + cert.replace("#1", "#2"), pkg, signer), /signer/);
+});
 
 test("every published template example packs and passes independent asset review", async () => {
     for (const name of ["format-text", "private-panel", "quick-capture", "state-composition", "note-query",

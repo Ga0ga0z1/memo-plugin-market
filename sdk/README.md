@@ -55,6 +55,8 @@ node sdk/memo-plugin.mjs verify ../memo-plugin-demo/panel.memoplugin ../memo-plu
 
 发布后如何向市场投稿、核对作者公钥以及目录收录现状，见[投稿指南](../CONTRIBUTING.md)。签名目录的字段见[目录 Schema](community-catalog.schema.json)。
 
+原生伴生 APK 由单独的 `node sdk/review-companion.mjs BUILD_TOOLS APK ANDROID_PACKAGE APK_SIGNER_SHA256` 检查。包名和 Android 签名指纹取自已验签的插件清单；命令调用 Android Build Tools 验证 APK，并输出该文件的摘要、权限和桌面入口，供发布审核与设备验收对照。宿主接管后台工作的材料要求见[投稿条件](../CONTRIBUTING.md#手机后台任务的投稿条件)。
+
 ## 常见问题
 
 - **提示 `EEXIST`**　CLI 保护已有密钥和输出文件。保留原私钥，给新发行包选择另一个文件名。

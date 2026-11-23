@@ -43,9 +43,16 @@ body:
     validations:
       required: true
   - type: textarea
+    id: execution
+    attributes:
+      label: 手机端任务由谁执行
+      description: 仅在页面内运行、调用现有短操作，或只在作者服务器上定时生成内容，可直接这样说明。需要切应用或熄屏后继续的手机任务，请逐项列出触发入口、宿主适配器、最低拓展版 versionCode 和支持该适配器的发行说明。
+    validations:
+      required: true
+  - type: textarea
     id: test
     attributes:
       label: 试装环境与复现步骤
-      description: 写出测过的拓展版版本、如何打开插件、示例输入和预期结果；有伴生应用时写出安装顺序。
+      description: 写出试装版本、入口、示例输入及结果。有伴生 APK 时给出安装顺序和桌面入口用途。提交手机后台任务时，附上停止伴生进程并熄屏后由宿主完成任务的记录，以及重开插件回读同一结果的步骤。
     validations:
       required: true
